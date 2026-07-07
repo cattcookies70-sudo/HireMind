@@ -1,58 +1,91 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🧠 HireMind – Gestion intelligente des stagiaires avec extraction IA
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+[![PHP Version](https://img.shields.io/badge/PHP-8.4-blue.svg)](https://php.net)
+[![Laravel Version](https://img.shields.io/badge/Laravel-13.18-red.svg)](https://laravel.com)
+[![Groq API](https://img.shields.io/badge/Groq-LLaMA%203.1-orange.svg)](https://groq.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## About Laravel
+**HireMind** est une application web de gestion de stagiaires développée avec Laravel. Elle permet de créer, modifier, consulter et supprimer des fiches stagiaires, tout en intégrant une fonctionnalité d'**extraction automatique des données (prénom, nom, email, téléphone)** à partir d’un fichier PDF de CV, grâce à l’API **Groq** et son modèle de langage **LLaMA 3.1**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+> 🔥 L’extraction des données est réalisée en appelant une IA générative, sans apprentissage préalable : le modèle lit le texte du PDF et restitue un JSON structuré.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🎯 Fonctionnalités principales
 
-## Learning Laravel
+- ✅ Authentification sécurisée (Laravel Breeze)
+- ✅ CRUD complet des stagiaires
+- ✅ Extraction automatique des données depuis un CV (PDF) via API Groq
+- ✅ Remplissage instantané du formulaire (AJAX)
+- ✅ Tableau de bord avec :
+  - 🔍 Recherche textuelle globale
+  - 🏷️ Filtres par école / filière
+  - 🔁 Tri (date, nom, prénom, email) ascendant / descendant
+  - 📄 Pagination Laravel
+- ✅ Upload et stockage des CV (disque public / local)
+- ✅ Suppression automatique des fichiers à la suppression du stagiaire
+- ✅ Politiques d’autorisation (Policy) pour sécuriser l’accès aux données
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🧠 Stack technique
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+| Composant       | Technologie                                     |
+|-----------------|-------------------------------------------------|
+| Framework       | Laravel 13.18                                   |
+| Langage         | PHP 8.4                                         |
+| Base de données | SQLite (intègre, configurable vers MySQL/PgSQL) |
+| Frontend        | Blade + Tailwind CSS                            |
+| IA / NLP        | Groq API (modèle `llama-3.1-8b-instant`)        |
+| PDF parsing     | `smalot/pdfparser`                              |
+| HTTP Client     | Guzzle (intégré à Laravel)                      |
+| Assets          | Laravel Vite / NPM                              |
 
-## Agentic Development
+---
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## 📦 Installation
+
+### Prérequis
+
+- PHP 8.4+
+- Composer
+- Node.js & NPM
+- SQLite (ou MySQL / PostgreSQL)
+
+### Étapes d’installation
 
 ```bash
-composer require laravel/boost --dev
+# 1. Cloner le dépôt
+git clone https://github.com/votre_pseudo/HireMind.git
+cd HireMind
 
-php artisan boost:install
-```
+# 2. Installer les dépendances PHP
+composer install
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+# 3. Installer les dépendances frontend
+npm install
+npm run build
 
-## Contributing
+# 4. Configurer l’environnement
+cp .env.example .env
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 5. Générer la clé de l’application
+php artisan key:generate
 
-## Code of Conduct
+# 6. Configurer la base de données SQLite
+touch database/database.sqlite   # sur Linux/macOS
+# ou
+New-Item -Path database/database.sqlite -ItemType File   # sur Windows (PowerShell)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 7. Configurer votre clé API Groq dans le .env
+# GROQ_API_KEY=votre_cle_api_ici
+# GROQ_MODEL=llama-3.1-8b-instant
 
-## Security Vulnerabilities
+# 8. Exécuter les migrations
+php artisan migrate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 9. Créer le lien symbolique pour les fichiers publics
+php artisan storage:link
 
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# 10. Lancer le serveur
+php artisan serve --port=8002
